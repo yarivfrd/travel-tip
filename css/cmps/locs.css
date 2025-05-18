@@ -26,6 +26,36 @@
     color: var(--color4);
 }
 
+.loc .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.loc-item-state {
+    display: flex;
+    align-items: center;
+    visibility: hidden;
+}
+
+.loc-item-state.loading {
+    visibility: visible;
+}
+
+.loc-item-state img {
+    height: 30px;
+    animation: spin 1s linear 0s infinite normal forwards;
+}
+@keyframes spin {
+    0% {
+      transform: rotate(0);  
+    }
+    
+    100% {
+        transform: rotate(360deg);  
+    }
+}
+
 .loc-btns {
     text-align: end;
 }

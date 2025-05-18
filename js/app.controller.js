@@ -49,11 +49,14 @@ function renderLocs(locs) {
                 ` | Updated: ${utilService.elapsedTime(loc.updatedAt)}`
                 : ''}
             </p>
-            <div class="loc-btns">     
-               <button title="Delete" onclick="app.onRemoveLoc('${loc.id}')">🗑️</button>
-               <button title="Edit" onclick="app.onUpdateLoc('${loc.id}')">✏️</button>
-               <button title="Select" onclick="app.onSelectLoc('${loc.id}')">🗺️</button>
-            </div>     
+            <div class="inner">
+                <div class="loc-item-state"><img src="./img/spinner.svg"></div>
+                <div class="loc-btns">     
+                    <button title="Delete" onclick="app.onRemoveLoc('${loc.id}')">🗑️</button>
+                    <button title="Edit" onclick="app.onUpdateLoc('${loc.id}')">✏️</button>
+                    <button title="Select" onclick="app.onSelectLoc('${loc.id}')">🗺️</button>
+                </div>
+            </div>
         </li>`}).join('')
 
     const elLocList = document.querySelector('.loc-list')
@@ -68,12 +71,26 @@ function renderLocs(locs) {
     document.querySelector('.debug').innerText = JSON.stringify(locs, null, 2)
 }
 
+// 1. Remove location – add confirmation (use confirm) 
 function onRemoveLoc(locId) {
-    locService.remove(locId)
-        .then(() => {
-            flashMsg('Location removed')
-            unDisplayLoc()
-            loadAndRenderLocs()
+    locService.getById(locId)
+        .then(({ name }) => {
+            if (confirm(`Delete ${name}?`)) {
+                const locItemStateEl = document.querySelector('.loc-item-state');
+                locItemStateEl.classList.add('loading');
+                locService.remove(locId)
+                    .then(() => {
+                        flashMsg('Location removed')
+                        unDisplayLoc()
+                        loadAndRenderLocs()
+                    })
+                    .catch(err => {
+                        console.error('OOPs:', err)
+                        flashMsg('Cannot remove location')
+                    }).finally(() => {
+                        locItemStateEl.classList.remove('loading');
+                    });
+            }
         })
         .catch(err => {
             console.error('OOPs:', err)
