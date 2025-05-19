@@ -32,7 +32,6 @@ function onInit() {
             console.error('OOPs:', err)
             flashMsg('Cannot init map')
         })
-     updateUserPos();
 }
 
 function renderLocs(locs) {
@@ -136,7 +135,10 @@ function onAddLoc(geo) {
 
 function loadAndRenderLocs() {
     locService.query()
-        .then(renderLocs)
+        .then(locs => {
+            renderLocs(locs);
+            updateUserPos();
+        })
         .catch(err => {
             console.error('OOPs:', err)
             flashMsg('Cannot load locations')
@@ -150,7 +152,6 @@ function onPanToUserPos() {
             unDisplayLoc()
             loadAndRenderLocs()
             flashMsg(`You are at Latitude: ${latLng.lat} Longitude: ${latLng.lng}`)
-            updateUserPos();
         })
         .catch(err => {
             console.error('OOPs:', err)
@@ -351,7 +352,7 @@ function renderDistancesFromUserPos() {
     locService.query()
         .then(locs => {
             locs.forEach(loc => {
-                document.querySelector(`[data-id=${loc.id}] h4 span:first-child`)
+                document.querySelector(`[data-id="${loc.id}"] h4 span:first-child`)
                 .insertAdjacentHTML('afterend', `<span>${loc.geo?.lat ? utilService.getDistance(loc.geo, gUserPos , 'K') : '???'} km from me</span>`);
             })
         });
