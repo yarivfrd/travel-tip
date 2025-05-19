@@ -71,7 +71,6 @@ function renderLocs(locs) {
     document.querySelector('.debug').innerText = JSON.stringify(locs, null, 2)
 }
 
-// 1. Remove location – add confirmation (use confirm) 
 function onRemoveLoc(locId) {
     locService.getById(locId)
         .then(({ name }) => {
