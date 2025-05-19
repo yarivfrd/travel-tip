@@ -21,3 +21,8 @@
 .loc-rate {
     color: var(--color4);
 }
+
+.selected-loc .distance-from-user img {
+    height: 30px;
+    animation: spin 1s linear 0s infinite normal forwards;
+}

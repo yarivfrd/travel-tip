@@ -189,20 +189,26 @@ function onSelectLoc(locId) {
 }
 
 function displayLoc(loc) {
+
     document.querySelector('.loc.active')?.classList?.remove('active')
     document.querySelector(`.loc[data-id="${loc.id}"]`).classList.add('active')
 
     mapService.panTo(loc.geo)
     mapService.setMarker(loc)
 
-    const el = document.querySelector('.selected-loc')
+    utilService.updateQueryParams({ locId: loc.id })
+
+    const
+        el = document.querySelector('.selected-loc'),
+        distanceFromUserLabel = document.querySelector(`[data-id="${getLocIdFromQueryParams()}"] .distance-from-user`)?.textContent;
+
     el.querySelector('.loc-name').innerText = loc.name
     el.querySelector('.loc-address').innerText = loc.geo.address
+    el.querySelector('.distance-from-user').innerHTML = distanceFromUserLabel || '<img src="./img/spinner.svg"></div>';
     el.querySelector('.loc-rate').innerHTML = '★'.repeat(loc.rate)
     el.querySelector('[name=loc-copier]').value = window.location
     el.classList.add('show')
 
-    utilService.updateQueryParams({ locId: loc.id })
 }
 
 function unDisplayLoc() {
@@ -353,7 +359,8 @@ function renderDistancesFromUserPos() {
         .then(locs => {
             locs.forEach(loc => {
                 document.querySelector(`[data-id="${loc.id}"] h4 span:first-child`)
-                .insertAdjacentHTML('afterend', `<span>${loc.geo?.lat ? utilService.getDistance(loc.geo, gUserPos , 'K') : '???'} km from me</span>`);
-            })
+                .insertAdjacentHTML('afterend', `<span class='distance-from-user'>${loc.geo?.lat ? utilService.getDistance(loc.geo, gUserPos , 'K') : '???'} km from me</span>`);
+            });
+            document.querySelector('.selected-loc .distance-from-user').innerHTML = document.querySelector(`[data-id='${getLocIdFromQueryParams()}'] .distance-from-user`).textContent;
         });
 }
