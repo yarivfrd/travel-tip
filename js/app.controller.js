@@ -2,6 +2,8 @@ import { utilService } from './services/util.service.js'
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
 
+let gUserPos;
+
 window.onload = onInit
 
 // To make things easier in this project structure 
@@ -30,6 +32,7 @@ function onInit() {
             console.error('OOPs:', err)
             flashMsg('Cannot init map')
         })
+     updateUserPos();
 }
 
 function renderLocs(locs) {
@@ -147,6 +150,7 @@ function onPanToUserPos() {
             unDisplayLoc()
             loadAndRenderLocs()
             flashMsg(`You are at Latitude: ${latLng.lat} Longitude: ${latLng.lng}`)
+            updateUserPos();
         })
         .catch(err => {
             console.error('OOPs:', err)
@@ -329,4 +333,26 @@ function cleanStats(stats) {
         return acc
     }, [])
     return cleanedStats
+}
+
+function updateUserPos() {
+    mapService.getUserPosition()
+        .then(pos => {
+            gUserPos = pos;
+            renderDistancesFromUserPos();
+        })
+        .catch(err => {
+            console.error('OOPs:', err)
+            flashMsg('Cannot get your position')
+        })
+}
+
+function renderDistancesFromUserPos() {
+    locService.query()
+        .then(locs => {
+            locs.forEach(loc => {
+                document.querySelector(`[data-id=${loc.id}] h4 span:first-child`)
+                .insertAdjacentHTML('afterend', `<span>${loc.geo?.lat ? utilService.getDistance(loc.geo, gUserPos , 'K') : '???'} km from me</span>`);
+            })
+        });
 }
