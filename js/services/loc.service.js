@@ -30,7 +30,8 @@ export const locService = {
     save,
     setFilterBy,
     setSortBy,
-    getLocCountByRateMap
+    getLocCountByRateMap,
+    getLocCountByLastUpdated
 }
 
 function query() {
@@ -49,7 +50,7 @@ function query() {
                 const startIdx = gPageIdx * PAGE_SIZE
                 locs = locs.slice(startIdx, startIdx + PAGE_SIZE)
             }
-            
+
             if (gSortBy.rate !== undefined) {
                 locs.sort((p1, p2) => (p1.rate - p2.rate) * gSortBy.rate)
             } else if (gSortBy.name !== undefined) {
@@ -97,6 +98,25 @@ function getLocCountByRateMap() {
             }, { high: 0, medium: 0, low: 0 })
             locCountByRateMap.total = locs.length
             return locCountByRateMap
+        })
+}
+
+function getLocCountByLastUpdated() {
+    const now = new Date();
+    return storageService.query(DB_KEY)
+        .then(locs => {
+            const locCountByLastUpdatedMap = locs.reduce((map, loc) => {
+                if (loc.updatedAt === loc.createdAt) {
+                    map.never++;
+                } else if (new Date(loc.updatedAt).toDateString() === now.toDateString()) {
+                    map.today++;
+                } else {
+                    map.past++;
+                }
+                return map;
+            }, { today: 0, past: 0, never: 0 });
+            locCountByLastUpdatedMap.total = locs.length
+            return locCountByLastUpdatedMap
         })
 }
 
