@@ -361,6 +361,6 @@ function renderDistancesFromUserPos() {
                 document.querySelector(`[data-id="${loc.id}"] h4 span:first-child`)
                 .insertAdjacentHTML('afterend', `<span class='distance-from-user'>${loc.geo?.lat ? utilService.getDistance(loc.geo, gUserPos , 'K') : '???'} km from me</span>`);
             });
-            document.querySelector('.selected-loc .distance-from-user').innerHTML = document.querySelector(`[data-id='${getLocIdFromQueryParams()}'] .distance-from-user`).textContent;
+            if (getLocIdFromQueryParams()) document.querySelector('.selected-loc .distance-from-user').innerHTML = document.querySelector(`[data-id='${getLocIdFromQueryParams()}'] .distance-from-user`).textContent;
         });
 }
