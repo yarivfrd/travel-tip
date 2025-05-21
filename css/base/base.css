@@ -17,7 +17,7 @@ header h1 {
 input[type=text],input[type=number] {
     line-height: 2em;
     background-color: var(--color1);
-    border: 0;
+    border: solid 1px;
 }
 
 button {
@@ -45,3 +45,6 @@ button:hover {
     font-size: .8em;
 }
 
+::backdrop {
+    background-color: rgba(0,0,0,.5);
+}
