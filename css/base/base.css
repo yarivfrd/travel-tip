@@ -45,6 +45,11 @@ button:hover {
     font-size: .8em;
 }
 
+dialog {
+    background-color: var(--bg2);
+    border-color: var(--bg1);
+}
+
 ::backdrop {
     background-color: rgba(0,0,0,.5);
 }
