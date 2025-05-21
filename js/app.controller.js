@@ -18,7 +18,7 @@ window.app = {
     onShareLoc,
     onSetSortBy,
     onSetFilterBy,
-    handleDialogSave
+    onDialogSave
 }
 
 function onInit() {
@@ -178,7 +178,7 @@ function onUpdateLoc(locId) {
         })
 }
 
-function handleDialogSave() {
+function onDialogSave() {
 
     const
         dialogEl = document.querySelector('.manage-loc-dialog'),
