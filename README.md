@@ -1,4 +1,4 @@
-# TravelTip
+# TravelTip (Yariv Fruend)
 #### The app that gets you somewhere
 
 
@@ -51,12 +51,13 @@ export const locService = {
     save,
     setFilterBy,
     setSortBy,
-    getLocCountByRateMap
+    getLocCountByRateMap,
+    getLocCountByLastUpdated
 }
 
 export const mapService = {
     initMap,
-    getPosition,
+    getUserPosition,
     setMarker,
     panTo,
     lookupAddressGeo,
@@ -78,7 +79,8 @@ window.app = {
     onCopyLoc,
     onShareLoc,
     onSetSortBy,
-    onSetFilterBy
+    onSetFilterBy,
+    onDialogSave
 }
 ```
 
